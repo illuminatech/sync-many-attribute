@@ -5,7 +5,7 @@ namespace Illuminatech\SyncManyAttribute\Test;
 use Illuminatech\SyncManyAttribute\Test\Support\Item;
 use Illuminatech\SyncManyAttribute\Test\Support\Category;
 
-class SyncManyAttributeTraitTest extends TestCase
+class SyncManyToManyAttributeTest extends TestCase
 {
     public function testInsert()
     {

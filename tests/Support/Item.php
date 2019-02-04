@@ -4,7 +4,7 @@ namespace Illuminatech\SyncManyAttribute\Test\Support;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminatech\SyncManyAttribute\SyncManyAttributeTrait;
+use Illuminatech\SyncManyAttribute\SyncManyToManyAttribute;
 
 /**
  * @property int $id
@@ -15,7 +15,7 @@ use Illuminatech\SyncManyAttribute\SyncManyAttributeTrait;
  */
 class Item extends Model
 {
-    use SyncManyAttributeTrait;
+    use SyncManyToManyAttribute;
 
     /**
      * {@inheritdoc}
@@ -27,7 +27,7 @@ class Item extends Model
         return $this->belongsToMany(Category::class);
     }
 
-    protected function manyToManyAttributes()
+    protected function syncManyToManyAttributes(): array
     {
         return [
             'category_ids' => 'categories',
