@@ -1,0 +1,35 @@
+{
+    "name": "illuminatech/sync-many-attribute",
+    "description": "Allows control over Eloquent many-to-many relation via virtual attribute",
+    "keywords": ["laravel", "eloquent", "many-to-many", "attribute", "sync"],
+    "license": "BSD-3-Clause",
+    "support": {
+        "issues": "https://github.com/illuminatech/multipart-middleware/issues",
+        "wiki": "https://github.com/illuminatech/multipart-middleware/wiki",
+        "source": "https://github.com/illuminatech/multipart-middleware"
+    },
+    "authors": [
+        {
+            "name": "Paul Klimov",
+            "email": "klimov.paul@gmail.com"
+        }
+    ],
+    "require": {
+        "illuminate/database": "^5.6"
+    },
+    "autoload": {
+        "psr-4": {
+            "Illuminatech\\SyncManyAttribute\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Illuminatech\\SyncManyAttribute\\Test\\": "tests"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0.x-dev"
+        }
+    }
+}
