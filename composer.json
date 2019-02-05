@@ -1,6 +1,6 @@
 {
     "name": "illuminatech/sync-many-attribute",
-    "description": "Allows control over Eloquent many-to-many relation via virtual attribute",
+    "description": "Allows control over Eloquent many-to-many relation via array attribute",
     "keywords": ["laravel", "eloquent", "many-to-many", "attribute", "sync"],
     "license": "BSD-3-Clause",
     "support": {

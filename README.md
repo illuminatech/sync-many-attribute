@@ -150,7 +150,7 @@ class KioskController extends Controller
   in order to make them available for mass assignment.
 
 
-## Pivot attributes setup
+## Pivot attributes setup <span id="pivot-attributes-setup"></span>
 
 You may setup the pivot attributes, which should be saved during each relation synchronization. To do so, you should define
 the sync attribute as an array, which key defines relation name and value - the pivot attributes. [[\Closure]] can be used
@@ -256,4 +256,40 @@ $item->save(); // relation `Item::categories()` synchronized automatically
 
 $category = $item->categories()->first();
 var_dump($category->pivot->type); // outputs 'help-content'
+```
+
+## Nova Integration <span id="nova-integration"></span>
+
+One of the main benefit of this extension is supporty of 3rd party CMS like [Nova](https://nova.laravel.com).
+You may use sync attributes, allowing user to setup many-to-many relation directly from create/update form, instead of
+operating separated listing from details page.
+
+You can create input for `BelongsToMany` relation as multiple select or checkbox list.
+Packages like [fourstacks/nova-checkboxes](https://github.com/fourstacks/nova-checkboxes) might be used for such fields.
+The final Nova resource may look like following:
+
+```php
+<?php
+
+use Laravel\Nova\Resource;
+use Laravel\Nova\Fields\ID;
+use Fourstacks\NovaCheckboxes\Checkboxes;
+
+class Item extends Resource
+{
+    public static $model = \App\Models\Item::class; // uses `SyncManyToManyAttribute` for 'categories'
+    
+    public function fields(Request $request)
+        {
+            return [
+                ID::make()->sortable(),
+    
+                // ...
+    
+                // use single checkbox list input instead of `\Laravel\Nova\Fields\BelongsToMany`:
+                Checkboxes::make(__('Categories'), 'category_ids')
+                    ->options(\App\Models\Category::pluck('name', 'id')),
+            ];
+        }
+}
 ```
