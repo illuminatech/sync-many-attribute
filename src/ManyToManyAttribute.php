@@ -11,14 +11,16 @@ use Closure;
 use InvalidArgumentException;
 
 /**
- * AttributeDefinition
+ * ManyToManyAttribute represents a definition of the attribute for the many-to-many relation synchronization.
+ *
+ * This class does not contain the model instance, always accepting it as an argument to avoid cycle references.
  *
  * @see SyncManyToManyAttribute
  *
  * @author Paul Klimov <klimov.paul@gmail.com>
  * @since 1.0
  */
-class AttributeDefinition
+class ManyToManyAttribute
 {
     /**
      * @var string underlying many-to-many relation name.

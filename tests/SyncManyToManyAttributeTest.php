@@ -2,9 +2,9 @@
 
 namespace Illuminatech\SyncManyAttribute\Test;
 
+use Illuminatech\SyncManyAttribute\Test\Support\Tag;
 use Illuminatech\SyncManyAttribute\Test\Support\Item;
 use Illuminatech\SyncManyAttribute\Test\Support\Category;
-use Illuminatech\SyncManyAttribute\Test\Support\Tag;
 
 class SyncManyToManyAttributeTest extends TestCase
 {
@@ -72,5 +72,23 @@ class SyncManyToManyAttributeTest extends TestCase
 
         $this->assertEquals('test-reason', $tag->pivot->reason);
         $this->assertTrue($tag->pivot->attached_at > 0);
+    }
+
+    /**
+     * @depends testPivotAttributes
+     */
+    public function testSerialize()
+    {
+        $tagIds = Tag::query()->pluck('id')->toArray();
+
+        $item = new Item();
+        $item->name = 'new item';
+        $item->tag_ids = $tagIds;
+
+        $serializedItem = serialize($item);
+
+        $unserializedItem = unserialize($serializedItem);
+
+        $this->assertEquals($item->tag_ids, $unserializedItem->tag_ids);
     }
 }

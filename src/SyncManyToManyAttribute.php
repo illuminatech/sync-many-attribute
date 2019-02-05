@@ -11,9 +11,71 @@ use Illuminate\Support\Arr;
 use InvalidArgumentException;
 
 /**
- * SyncManyAttributeTrait
+ * SyncManyToManyAttribute allows its owner synchronization of the many-to-many relations via array attributes.
  *
- * @see AttributeDefinition
+ * Each such attribute matches particular `BelongsToMany` relation and accepts array of related model IDs.
+ * Relations will be automatically synchronized during model saving.
+ *
+ * In order to declare attributes for relation synchronization model class should define `syncManyToManyAttributes()` method.
+ * For example:
+ *
+ * ```php
+ * use Illuminate\Database\Eloquent\Model;
+ * use Illuminatech\SyncManyAttribute\ManyToManyAttribute;
+ * use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+ * use Illuminatech\SyncManyAttribute\SyncManyToManyAttribute;
+ *
+ * class Item extends Model
+ * {
+ *     use SyncManyToManyAttribute;
+ *
+ *     protected function syncManyToManyAttributes(): array
+ *     {
+ *         return [
+ *             'category_ids' => 'categories',
+ *             'tag_ids' => [
+ *                 'tags' => [
+ *                     'created_at' => function ($model) {
+ *                          return now();
+ *                      }
+ *                 ],
+ *             ],
+ *             'article_ids' => (new ManyToManyAttribute)
+ *                 ->relationName('articles')
+ *                 ->pivotAttributes(['type' => 'help-content']),
+ *         ];
+ *     }
+ *
+ *     public function categories(): BelongsToMany
+ *     {
+ *         return $this->belongsToMany(Category::class);
+ *     }
+ *
+ *     public function tags(): BelongsToMany
+ *     {
+ *         return $this->belongsToMany(Tag::class)->withPivot(['created_at']);
+ *     }
+ *
+ *     public function articles(): BelongsToMany
+ *     {
+ *         return $this->belongsToMany(Article::class)->withPivot(['type']);
+ *     }
+ *
+ *     // ...
+ * }
+ * ```
+ *
+ * Usage example:
+ *
+ * ```
+ * $item = new Item();
+ * $item->category_ids = Category::query()->pluck('id')->toArray();
+ * // ...
+ * $item->save();
+ * ```
+ *
+ * @see ManyToManyAttribute
+ * @see \Illuminate\Database\Eloquent\Relations\BelongsToMany
  *
  * @mixin \Illuminate\Database\Eloquent\Model
  *
@@ -28,7 +90,7 @@ trait SyncManyToManyAttribute
     private $syncManyToManyAttributes = [];
 
     /**
-     * @var AttributeDefinition[]
+     * @var ManyToManyAttribute[] definitions of the attributes for many-to-many synchronization.
      */
     private $syncManyToManyAttributeDefinitions = [];
 
@@ -49,15 +111,15 @@ trait SyncManyToManyAttribute
      *              }
      *         ],
      *     ],
-     *     'article_ids' => (new AttributeDefinition)
+     *     'article_ids' => (new ManyToManyAttribute)
      *         ->relationName('articles')
      *         ->pivotAttributes(['type' => 'help-content']),
      * ];
      * ```
      *
-     * @see AttributeDefinition
+     * @see ManyToManyAttribute
      *
-     * @return array
+     * @return array attribute definitions.
      */
     abstract protected function syncManyToManyAttributes(): array;
 
@@ -172,10 +234,12 @@ trait SyncManyToManyAttribute
     }
 
     /**
+     * Returns definition of the sync many-to-many attribute as object.
+     *
      * @param  string $key attribute name.
-     * @return AttributeDefinition attribute definition.
+     * @return ManyToManyAttribute attribute definition.
      */
-    private function getSyncManyToManyAttributeDefinition($key): AttributeDefinition
+    private function getSyncManyToManyAttributeDefinition($key): ManyToManyAttribute
     {
         if (! isset($this->syncManyToManyAttributeDefinitions[$key])) {
             $rawDefinitions = $this->syncManyToManyAttributes();
@@ -183,7 +247,7 @@ trait SyncManyToManyAttribute
                 throw new InvalidArgumentException("Undefined sync many-to-many attribute '{$key}'.");
             }
 
-            $this->syncManyToManyAttributeDefinitions[$key] = new AttributeDefinition($rawDefinitions[$key]);
+            $this->syncManyToManyAttributeDefinitions[$key] = new ManyToManyAttribute($rawDefinitions[$key]);
         }
 
         return $this->syncManyToManyAttributeDefinitions[$key];
