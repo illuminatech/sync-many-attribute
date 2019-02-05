@@ -67,11 +67,14 @@ use InvalidArgumentException;
  *
  * Usage example:
  *
- * ```
+ * ```php
  * $item = new Item();
  * $item->category_ids = Category::query()->pluck('id')->toArray();
  * // ...
- * $item->save();
+ * $item->save(); // relation `Item::categories` synchronized automatically
+ *
+ * $item = $item->fresh();
+ * var_dump($item->category_ids); // outputs array of category IDs like `[1, 3, 8, ...]`
  * ```
  *
  * @see ManyToManyAttribute
