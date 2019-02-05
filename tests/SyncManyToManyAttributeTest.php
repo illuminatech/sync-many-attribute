@@ -4,6 +4,7 @@ namespace Illuminatech\SyncManyAttribute\Test;
 
 use Illuminatech\SyncManyAttribute\Test\Support\Item;
 use Illuminatech\SyncManyAttribute\Test\Support\Category;
+use Illuminatech\SyncManyAttribute\Test\Support\Tag;
 
 class SyncManyToManyAttributeTest extends TestCase
 {
@@ -52,5 +53,24 @@ class SyncManyToManyAttributeTest extends TestCase
         $item->save();
 
         $this->assertEquals(0, $item->categories()->count());
+    }
+
+    /**
+     * @depends testInsert
+     * @depends testUpdate
+     */
+    public function testPivotAttributes()
+    {
+        $tagIds = Tag::query()->pluck('id')->toArray();
+
+        $item = new Item();
+        $item->name = 'new item';
+        $item->tag_ids = $tagIds;
+        $item->save();
+
+        $tag = $item->tags()->first();
+
+        $this->assertEquals('test-reason', $tag->pivot->reason);
+        $this->assertTrue($tag->pivot->attached_at > 0);
     }
 }

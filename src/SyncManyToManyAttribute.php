@@ -13,6 +13,8 @@ use InvalidArgumentException;
 /**
  * SyncManyAttributeTrait
  *
+ * @see AttributeDefinition
+ *
  * @mixin \Illuminate\Database\Eloquent\Model
  *
  * @author Paul Klimov <klimov.paul@gmail.com>
@@ -24,6 +26,40 @@ trait SyncManyToManyAttribute
      * @var array[] values of the attributes for many-to-many synchronization in format: `attributeName => [values]`.
      */
     private $syncManyToManyAttributes = [];
+
+    /**
+     * @var AttributeDefinition[]
+     */
+    private $syncManyToManyAttributeDefinitions = [];
+
+    /**
+     * Defines list of attributes  for many-to-many synchronization.
+     * Method should return an array, which keys are the names of attributes, and values are the names
+     * of the matching `BelongsToMany` relation.
+     *
+     * For example:
+     *
+     * ```php
+     * return [
+     *     'category_ids' => 'categories',
+     *     'tag_ids' => [
+     *         'tags' => [
+     *             'created_at' => function ($model) {
+     *                  return now();
+     *              }
+     *         ],
+     *     ],
+     *     'article_ids' => (new AttributeDefinition)
+     *         ->relationName('articles')
+     *         ->pivotAttributes(['type' => 'help-content']),
+     * ];
+     * ```
+     *
+     * @see AttributeDefinition
+     *
+     * @return array
+     */
+    abstract protected function syncManyToManyAttributes(): array;
 
     /**
      * Boots this trait in the scope of the owner model, attaching necessary event handlers.
@@ -78,6 +114,10 @@ trait SyncManyToManyAttribute
      */
     public function hasSyncManyToManyAttribute($key): bool
     {
+        if (isset($this->syncManyToManyAttributes[$key])) {
+            return true;
+        }
+
         $definitions = $this->syncManyToManyAttributes();
 
         return isset($definitions[$key]);
@@ -109,18 +149,8 @@ trait SyncManyToManyAttribute
             return $this->syncManyToManyAttributes[$key];
         }
 
-        $definitions = $this->syncManyToManyAttributes();
-
-        if (! isset($definitions[$key])) {
-            throw new InvalidArgumentException("Undefined sync many-to-many attribute '{$key}'.");
-        }
-
-        $relationName = $definitions[$key];
-
-        /* @var $relation \Illuminate\Database\Eloquent\Relations\BelongsToMany */
-        $relation = $this->{$relationName}();
-
-        $this->syncManyToManyAttributes[$key] = $relation->allRelatedIds()->toArray();
+        $this->syncManyToManyAttributes[$key] = $this->getSyncManyToManyAttributeDefinition($key)
+            ->getRelatedIds($this);
 
         return $this->syncManyToManyAttributes[$key];
     }
@@ -133,32 +163,29 @@ trait SyncManyToManyAttribute
      */
     private function syncManyToManyFromAttributes(): void
     {
-        $definitions = $this->syncManyToManyAttributes();
-
         foreach ($this->syncManyToManyAttributes as $key => $values) {
-            $relationName = $definitions[$key];
-            /* @var $relation \Illuminate\Database\Eloquent\Relations\BelongsToMany */
-            $relation = $this->{$relationName}();
-            $relation->sync($values);
+            $this->getSyncManyToManyAttributeDefinition($key)
+                ->sync($this, $values);
 
             unset($this->syncManyToManyAttributes[$key]);
         }
     }
 
     /**
-     * Defines list of attributes  for many-to-many synchronization.
-     * Method should return an array, which keys are the names of attributes, and values are the names
-     * of the matching `BelongsToMany` relation.
-     *
-     * For example:
-     *
-     * ```php
-     * return [
-     *     'category_ids' => 'categories',
-     * ];
-     * ```
-     *
-     * @return array
+     * @param  string $key attribute name.
+     * @return AttributeDefinition attribute definition.
      */
-    abstract protected function syncManyToManyAttributes(): array;
+    private function getSyncManyToManyAttributeDefinition($key): AttributeDefinition
+    {
+        if (! isset($this->syncManyToManyAttributeDefinitions[$key])) {
+            $rawDefinitions = $this->syncManyToManyAttributes();
+            if (! isset($rawDefinitions[$key])) {
+                throw new InvalidArgumentException("Undefined sync many-to-many attribute '{$key}'.");
+            }
+
+            $this->syncManyToManyAttributeDefinitions[$key] = new AttributeDefinition($rawDefinitions[$key]);
+        }
+
+        return $this->syncManyToManyAttributeDefinitions[$key];
+    }
 }

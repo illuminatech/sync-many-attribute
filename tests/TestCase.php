@@ -79,6 +79,18 @@ class TestCase extends \PHPUnit\Framework\TestCase
             $table->unsignedInteger('category_id');
             $table->unsignedInteger('item_id');
         });
+
+        $this->getSchemaBuilder()->create('tags', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('name');
+        });
+
+        $this->getSchemaBuilder()->create('item_tag', function (Blueprint $table) {
+            $table->unsignedInteger('item_id');
+            $table->unsignedInteger('tag_id');
+            $table->string('reason');
+            $table->integer('attached_at')->default(0);
+        });
     }
 
     /**
@@ -102,6 +114,13 @@ class TestCase extends \PHPUnit\Framework\TestCase
         ]);
         $this->getConnection()->table('categories')->insert([
             'name' => 'category2',
+        ]);
+
+        $this->getConnection()->table('tags')->insert([
+            'name' => 'tag1',
+        ]);
+        $this->getConnection()->table('tags')->insert([
+            'name' => 'tag2',
         ]);
     }
 }
