@@ -260,7 +260,7 @@ var_dump($category->pivot->type); // outputs 'help-content'
 
 ## Nova Integration <span id="nova-integration"></span>
 
-One of the main benefit of this extension is supporty of 3rd party CMS like [Nova](https://nova.laravel.com).
+One of the main benefit of this extension is support of 3rd party CMS like [Nova](https://nova.laravel.com).
 You may use sync attributes, allowing user to setup many-to-many relation directly from create/update form, instead of
 operating separated listing from details page.
 
