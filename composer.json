@@ -4,9 +4,9 @@
     "keywords": ["laravel", "eloquent", "many-to-many", "attribute", "sync"],
     "license": "BSD-3-Clause",
     "support": {
-        "issues": "https://github.com/illuminatech/multipart-middleware/issues",
-        "wiki": "https://github.com/illuminatech/multipart-middleware/wiki",
-        "source": "https://github.com/illuminatech/multipart-middleware"
+        "issues": "https://github.com/illuminatech/sync-many-attribute/issues",
+        "wiki": "https://github.com/illuminatech/sync-many-attribute/wiki",
+        "source": "https://github.com/illuminatech/sync-many-attribute"
     },
     "authors": [
         {
