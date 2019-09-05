@@ -10,8 +10,8 @@ This extension allows control over Eloquent many-to-many relations via array att
 
 For license information check the [LICENSE](LICENSE.md)-file.
 
-[![Latest Stable Version](https://poser.pugx.org/illuminatech/sync-many-attribute/v/stable.png)](https://packagist.org/packages/illuminatech/sync-many-attribute)
-[![Total Downloads](https://poser.pugx.org/illuminatech/sync-many-attribute/downloads.png)](https://packagist.org/packages/illuminatech/sync-many-attribute)
+[![Latest Stable Version](https://img.shields.io/packagist/v/illuminatech/sync-many-attribute.svg)](https://packagist.org/packages/illuminatech/sync-many-attribute)
+[![Total Downloads](https://img.shields.io/packagist/dt/illuminatech/sync-many-attribute.svg)](https://packagist.org/packages/illuminatech/sync-many-attribute)
 [![Build Status](https://travis-ci.org/illuminatech/sync-many-attribute.svg?branch=master)](https://travis-ci.org/illuminatech/sync-many-attribute)
 
 
@@ -47,7 +47,7 @@ Relations will be automatically synchronized during model saving.
   where you have a little control over model saving and post processing. Also it may simplify controller code, removing
   relation operations in favor to regular attribute mass assignment.
 
-In order to use the feature you should add [[\Illuminatech\SyncManyAttribute\SyncManyToManyAttribute]] trait to your model class
+In order to use the feature you should add `\Illuminatech\SyncManyAttribute\SyncManyToManyAttribute` trait to your model class
 and declare `syncManyToManyAttributes()` method, defining attributes for relation synchronization. This method should return
 an array, which each key is the name of the new virtual attribute and value is the name of the relation to be synchronized. 
 
@@ -109,8 +109,8 @@ You may use sync attributes during HTML form input composition. For example:
 ```blade
 ...
 <select multiple="multiple" name="category_ids[]" id="category_ids">
-@foreach($allCategories as $category)
-    <option value="{{$category->id}}" @if(in_array($category->id, $item->category_ids))selected="selected"@endif>{{$category->name}}</option>
+@foreach ($allCategories as $category)
+    <option value="{{ $category->id }}" @if(in_array($category->id, $item->category_ids)) selected="selected" @endif>{{ $category->name }}</option>
 @endforeach
 ...
 </select>
@@ -146,14 +146,14 @@ class KioskController extends Controller
 }
 ```
 
-> Note: remember you need to add the names of attribute for many-to-many synchronization to [[\Illuminate\Database\Eloquent\Model::$fillable]]
+> Note: remember you need to add the names of attribute for many-to-many synchronization to `\Illuminate\Database\Eloquent\Model::$fillable`
   in order to make them available for mass assignment.
 
 
 ## Pivot attributes setup <span id="pivot-attributes-setup"></span>
 
 You may setup the pivot attributes, which should be saved during each relation synchronization. To do so, you should define
-the sync attribute as an array, which key defines relation name and value - the pivot attributes. [[\Closure]] can be used
+the sync attribute as an array, which key defines relation name and value - the pivot attributes. `\Closure` can be used
 here for definition of particular pivot attribute value or entire pivot attributes set.
 For example:
 
@@ -200,7 +200,7 @@ class Item extends Model
 }
 ```
 
-You may use [[\Illuminatech\SyncManyAttribute\ManyToManyAttribute]] to create sync attribute definition in more OOP style:
+You may use `\Illuminatech\SyncManyAttribute\ManyToManyAttribute` to create sync attribute definition in more OOP style:
 
 ```php
 <?php
