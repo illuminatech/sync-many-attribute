@@ -74,9 +74,6 @@ class SyncManyToManyAttributeTest extends TestCase
         $this->assertTrue($tag->pivot->attached_at > 0);
     }
 
-    /**
-     * @depends testPivotAttributes
-     */
     public function testSerialize()
     {
         $tagIds = Tag::query()->pluck('id')->toArray();

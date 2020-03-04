@@ -90,7 +90,7 @@ trait SyncManyToManyAttribute
     /**
      * @var array[] values of the attributes for many-to-many synchronization in format: `attributeName => [values]`.
      */
-    private $syncManyToManyAttributes = [];
+    protected $syncManyToManyAttributes = [];
 
     /**
      * @var ManyToManyAttribute[] definitions of the attributes for many-to-many synchronization.
