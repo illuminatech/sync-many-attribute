@@ -2,10 +2,10 @@
 
 namespace Illuminatech\SyncManyAttribute\Test;
 
-use Illuminate\Events\Dispatcher;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Capsule\Manager;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Events\Dispatcher;
 
 /**
  * Base class for the test cases.

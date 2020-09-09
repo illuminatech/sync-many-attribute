@@ -2,9 +2,9 @@
 
 namespace Illuminatech\SyncManyAttribute\Test;
 
-use Illuminatech\SyncManyAttribute\Test\Support\Tag;
-use Illuminatech\SyncManyAttribute\Test\Support\Item;
 use Illuminatech\SyncManyAttribute\Test\Support\Category;
+use Illuminatech\SyncManyAttribute\Test\Support\Item;
+use Illuminatech\SyncManyAttribute\Test\Support\Tag;
 
 class SyncManyToManyAttributeTest extends TestCase
 {
