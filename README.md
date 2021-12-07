@@ -12,7 +12,7 @@ For license information check the [LICENSE](LICENSE.md)-file.
 
 [![Latest Stable Version](https://img.shields.io/packagist/v/illuminatech/sync-many-attribute.svg)](https://packagist.org/packages/illuminatech/sync-many-attribute)
 [![Total Downloads](https://img.shields.io/packagist/dt/illuminatech/sync-many-attribute.svg)](https://packagist.org/packages/illuminatech/sync-many-attribute)
-[![Build Status](https://travis-ci.org/illuminatech/sync-many-attribute.svg?branch=master)](https://travis-ci.org/illuminatech/sync-many-attribute)
+[![Build Status](https://github.com/illuminatech/sync-many-attribute/workflows/build/badge.svg)](https://github.com/illuminatech/sync-many-attribute/actions)
 
 
 Installation
