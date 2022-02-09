@@ -1,7 +1,7 @@
 Sync Many-to-Many via Attribute Change Log
 ==========================================
 
-1.1.3 Under Development
+1.1.3, February 9, 2022
 -----------------------
 
 - Enh: Added support for "illuminate/database" 9.0 (klimov-paul)
